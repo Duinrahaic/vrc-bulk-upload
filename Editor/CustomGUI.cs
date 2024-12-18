@@ -6,7 +6,6 @@ namespace PeanutTools_VRC_Bulk_Upload {
     class CustomGUI {
         public static void SmallLineGap() {
             EditorGUILayout.Space();
-            EditorGUILayout.Space();
         }
 
         public static void LineGap() {
@@ -20,8 +19,17 @@ namespace PeanutTools_VRC_Bulk_Upload {
             GUILayout.Label(text, italicStyle);
         }
 
+        public static void WarningLabel(string text)
+        {
+            GUIStyle italicStyle = new GUIStyle(GUI.skin.label);
+            italicStyle.fontStyle = FontStyle.Bold;
+            italicStyle.normal.textColor = new Color(1.0f, 0.5f, 0.5f);
+            GUILayout.Label(text, italicStyle);
+        }
+
         public static void LargeLabel(string text) {
             GUIStyle italicStyle = new GUIStyle(GUI.skin.label);
+            italicStyle.fontStyle = FontStyle.Bold;
             italicStyle.fontSize = 20;
             GUILayout.Label(text, italicStyle);
         }
@@ -80,15 +88,20 @@ namespace PeanutTools_VRC_Bulk_Upload {
         }
 
         public static bool PrimaryButton(string label) {
-            return GUILayout.Button(label, GUILayout.Width(250), GUILayout.Height(50));
+            return GUILayout.Button(label, GUILayout.Width(250), GUILayout.Height(40));
         }
 
         public static bool StandardButton(string label) {
-            return GUILayout.Button(label, GUILayout.Width(150), GUILayout.Height(25));
+            return GUILayout.Button(label, GUILayout.Width(150), GUILayout.Height(30));
         }
 
         public static bool TinyButton(string label) {
-            return GUILayout.Button(label, GUILayout.Width(100), GUILayout.Height(15));
+            return GUILayout.Button(label, GUILayout.Width(100), GUILayout.Height(20));
+        }
+
+        public static bool TinyButtonShort(string label)
+        {
+            return GUILayout.Button(label, GUILayout.Width(47), GUILayout.Height(20));
         }
 
         public static bool ToggleButton(string label, bool isOpen) {

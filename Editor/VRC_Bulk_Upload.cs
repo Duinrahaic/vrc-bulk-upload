@@ -67,21 +67,31 @@ public class VRC_Bulk_Upload : EditorWindow {
         CustomGUI.ItalicLabel("Bulks and uploads all active VRChat avatars in your scenes.");
 
         CustomGUI.LineGap();
-        
-        CustomGUI.LargeLabel("Avatars In Scenes");
 
-        CustomGUI.LineGap();
+        if (!APIUser.IsLoggedIn)
+        {
+            CustomGUI.WarningLabel("Not logged into VRChat");
+            CustomGUI.ItalicLabel("Open the VRChat SDK panel to log in.");
+            CustomGUI.LineGap();
+        }
+
+        CustomGUI.LargeLabel("Avatars In Scenes");
+        CustomGUI.HorizontalRule();
 
         RenderAllAvatarsAndInScene();
-
         CustomGUI.LineGap();
+        CustomGUI.HorizontalRule();
 
         int count = GetUploadableCount();
-        if (CustomGUI.PrimaryButton($"Build And Upload All ({count})")) {
+
+        EditorGUI.BeginDisabledGroup(!APIUser.IsLoggedIn);
+        if (CustomGUI.PrimaryButton($"Build And Upload All ({count})"))
+        {
             // if (EditorUtility.DisplayDialog("Confirm", $"Are you sure you want to build and upload {count.ToString()} VRChat avatars?", "Yes", "No")) {
             _ = BuildAndUploadAllAvatars();
             // }
         }
+        EditorGUI.EndDisabledGroup();
 
         EditorGUILayout.EndScrollView();
     }
@@ -98,9 +108,10 @@ public class VRC_Bulk_Upload : EditorWindow {
         return avatarData;
     }
 
+    string notLoggedIn = "You must be logged in to VRChat to upload avatars. (Open the SDK panel if you havn't recently)";
+
     async Task BuildAndUploadAllAvatars() {
         var avatars = GetActiveVrchatAvatars();
-
         Debug.Log($"VRC_Bulk_Upload :: Building and uploading {avatars.Length} VRChat avatars...");
 
         foreach (var avatar in avatars) {
@@ -134,6 +145,11 @@ public class VRC_Bulk_Upload : EditorWindow {
     }
 
     async Task BuildAndUploadAvatar(VRCAvatarDescriptor vrcAvatarDescriptor) {
+        if (!APIUser.IsLoggedIn)
+        {
+            Debug.LogError(notLoggedIn);
+            return;
+        }
         Debug.Log($"VRC_Bulk_Upload :: Building and uploading '{vrcAvatarDescriptor.gameObject.name}'...");
 
         try {
@@ -238,6 +254,10 @@ public class VRC_Bulk_Upload : EditorWindow {
     }
 
     bool GetCanAvatarBeUploaded(VRCAvatarDescriptor vrcAvatarDescriptor) {
+        if (!APIUser.IsLoggedIn)
+        {
+            return false;
+        }
         if (vrcAvatarDescriptor.gameObject.GetComponent<PipelineManager>() == null)
         {
             return false;
@@ -355,17 +375,17 @@ public class VRC_Bulk_Upload : EditorWindow {
 
                 GUILayout.BeginHorizontal();
 
-                if (CustomGUI.TinyButton("View")) {
+                if (CustomGUI.TinyButtonShort("View")) {
                     Utils.FocusGameObject(rootObject);
                 }
 
-                EditorGUI.BeginDisabledGroup(!GetCanAvatarBeUploaded(vrcAvatarDescriptor));
-                    if (CustomGUI.TinyButton("Build")) {
+                EditorGUI.BeginDisabledGroup(!GetCanAvatarBeBuilt(vrcAvatarDescriptor));
+                    if (CustomGUI.TinyButtonShort("Build")) {
                        _ = BuildAvatar(vrcAvatarDescriptor);
                     }
                 EditorGUI.EndDisabledGroup();
 
-                if (CustomGUI.TinyButton("Test"))
+                if (CustomGUI.TinyButtonShort("Test"))
                 {
                     _ = BuildAndTestAvatar(vrcAvatarDescriptor);
                 }
