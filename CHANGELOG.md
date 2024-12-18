@@ -1,5 +1,5 @@
 # 1.1.1
-- UI Improvments
+- UI Improvements
 - Now checks if SDK is logged in
 
 # 1.1.0
