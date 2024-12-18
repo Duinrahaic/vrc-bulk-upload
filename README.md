@@ -13,4 +13,4 @@ Tested in Unity 2022.3.6f1 with VRC SDK 3.5.0 (VCC).
 
 ## Release
 
-Package `Package PeanutTools/VRC_Bulk_Upload` as a `.unitypackage`. Rename to `peanuttools_vrcbulkupload_$version.unitypackage`
+Package `Package Plugins/VRC_Bulk_Upload` as a `.unitypackage`. Rename to `vrcbulkupload_$version.unitypackage`
